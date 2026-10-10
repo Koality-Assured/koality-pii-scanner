@@ -1,0 +1,11 @@
+Internal corporate and documentation-placeholder email addresses. The
+email-public-service rule matches only public consumer providers, so none of
+these should be flagged.
+
+team@koalityassured.com
+admin@internal.example.org
+qa@corp.internal
+build@dev-company.com
+contractor@agency.net
+placeholder@example.com
+noreply@example.org

@@ -1,0 +1,5 @@
+# SYNTHETIC test fixture — NOT real player identifiers. Validates gaming-platform-id detection.
+steam_id64: "76561190000000001"
+nintendo_switch_friend_code: "SW-1234-5678-9012"
+discord_user_id: "123456789012345678"
+xuid: "2533274790412345"

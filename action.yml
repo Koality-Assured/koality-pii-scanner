@@ -1,0 +1,66 @@
+name: 'Koality PII Scanner'
+author: 'Koality Assured'
+description: 'Deterministic PII, credential, and sensitive data scanner.'
+
+inputs:
+  source:
+    description: 'Directory, file, or zip path to scan'
+    required: false
+    default: '.'
+  report-format:
+    description: 'Output format: json, table, or sarif'
+    required: false
+    default: 'json'
+  report-path:
+    description: 'Output file path. Use "-" for stdout.'
+    required: false
+    default: '-'
+  redact:
+    description: 'Redact matched values in output'
+    required: false
+    default: 'true'
+  exit-on-findings:
+    description: 'Exit with code 1 when unsuppressed findings are found'
+    required: false
+    default: 'true'
+  version:
+    description: 'Version tag to install (e.g. v0.2.0). Defaults to latest.'
+    required: false
+    default: 'latest'
+
+outputs:
+  findings-count:
+    description: 'Number of PII findings detected'
+    value: ${{ steps.scan.outputs.findings_count }}
+  report-path:
+    description: 'Path to the generated report'
+    value: ${{ steps.scan.outputs.report_path }}
+
+runs:
+  using: 'composite'
+  steps:
+    - name: Install koality-pii-scanner
+      shell: bash
+      run: |
+        pip install --quiet koality-pii-scanner || pip install --quiet pii-scan || true
+
+    - name: Run koality-pii-scanner
+      id: scan
+      shell: bash
+      run: |
+        REPORT_PATH="${{ inputs.report-path }}"
+        if [ "$REPORT_PATH" = "-" ]; then
+          REPORT_PATH="/tmp/pii-scan-report.json"
+        fi
+        REDACT_FLAG=$([[ "${{ inputs.redact }}" == "true" ]] && echo "--redact" || echo "--no-redact")
+        EXIT_FLAG=$([[ "${{ inputs.exit-on-findings }}" == "true" ]] && echo "--exit-code 1" || echo "--exit-code 0")
+        pii-scan detect \
+          --source "${{ inputs.source }}" \
+          --report-format "${{ inputs.report-format }}" \
+          --report-path "$REPORT_PATH" \
+          $REDACT_FLAG \
+          $EXIT_FLAG || EXIT_CODE=$?
+        COUNT=$(python3 -c "import json; print(len(json.load(open('$REPORT_PATH'))))" 2>/dev/null || echo "0")
+        echo "findings_count=$COUNT" >> "$GITHUB_OUTPUT"
+        echo "report_path=$REPORT_PATH" >> "$GITHUB_OUTPUT"
+        exit ${EXIT_CODE:-0}

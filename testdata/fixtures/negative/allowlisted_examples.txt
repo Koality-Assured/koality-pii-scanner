@@ -1,0 +1,9 @@
+Known-safe documentation examples and vendor sandbox fixtures. These MUST be
+suppressed by the allowlist and produce ZERO findings (prose form, no secret-
+assignment keywords, so only the value-level rules + allowlist are exercised).
+
+AWS documentation canonical example access key: AKIAIOSFODNN7EXAMPLE
+Visa sandbox test card: 4242424242424242
+Mastercard sandbox test card: 5555555555554444
+Amex sandbox test card: 378282246310005
+Discover sandbox test card: 6011111111111117

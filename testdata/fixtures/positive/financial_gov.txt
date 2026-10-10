@@ -1,0 +1,6 @@
+SYNTHETIC test fixture — NOT real account or government identifiers.
+
+iban: "GB82WEST12345698765432"
+ein: "12-3456789"
+passport_number: "A12345678"
+UK National Insurance number: AB123456C

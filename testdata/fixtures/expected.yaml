@@ -1,0 +1,41 @@
+# PII scanner fixture expectations. Validated by scripts/validate_fixtures.py and
+# tests/test_fixtures.py on every PR.
+#
+#   positive: each file MUST produce at least the listed rule_ids
+#             (incidental extra matches are allowed).
+#   negative: each file MUST produce ZERO findings.
+#
+# All fixture values are SYNTHETIC — no real credentials or personal data.
+
+positive:
+  credentials.py:
+    - pii-scan:aws-access-key-id
+    - pii-scan:github-token
+    - pii-scan:bearer-token
+    - pii-scan:jwt-token
+    - pii-scan:pem-private-key
+  pii_core.txt:
+    - pii-scan:ssn-us
+    - pii-scan:credit-card
+    - pii-scan:us-phone
+    - pii-scan:email-public-service
+  gaming_ids.yaml:
+    - pii-scan:steam-id-64
+    - pii-scan:nintendo-switch-friend-code
+    - pii-scan:discord-snowflake-context
+    - pii-scan:xbox-xuid-context
+  financial_gov.txt:
+    - pii-scan:iban
+    - pii-scan:us-ein
+    - pii-scan:us-passport-number
+    - pii-scan:uk-national-insurance
+  network_and_special.py:
+    - pii-scan:ipv4-user-context
+    - pii-scan:health-data-context
+    - pii-scan:biometric-data-context
+
+negative:
+  - allowlisted_examples.txt
+  - internal_and_example_emails.txt
+  - lookalikes.py
+  - clean_source.py
