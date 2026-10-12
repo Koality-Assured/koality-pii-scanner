@@ -320,9 +320,11 @@ class TestExpandedRuleset:
         result = self._run_on(tmp_path, 'contact = "user@gmail.com"\n')
         assert "pii-scan:email-public-service" in self._ids(result)
 
-    def test_internal_corporate_email_not_detected(self, tmp_path):
+    def test_internal_corporate_email_detected_by_general_rule(self, tmp_path):
         result = self._run_on(tmp_path, 'owner = "dev@koalityassured.com"\n')
-        assert not any("email" in rid for rid in self._ids(result))
+        ids = self._ids(result)
+        assert "pii-scan:email" in ids
+        assert "pii-scan:email-public-service" not in ids
 
     def test_internal_custom_domain_email_not_detected(self, tmp_path):
         result = self._run_on(tmp_path, 'admin = "admin@internal.example.org"\n')
@@ -488,7 +490,7 @@ class TestAllowlist:
 
     def test_real_credit_card_still_detected(self, tmp_path):
         # Not in the test-PAN allowlist -> still reported
-        result = self._run_on(tmp_path, "card = 4111111111111112\n", "config.py")
+        result = self._run_on(tmp_path, "card = 4111111111111129\n", "config.py")
         assert "pii-scan:credit-card" in self._ids(result)
 
 

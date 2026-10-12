@@ -5,6 +5,8 @@ from typing import Optional
 
 import yaml
 
+from .validators import validate
+
 
 @dataclass
 class Rule:
@@ -23,18 +25,27 @@ class Rule:
     def compile(self) -> None:
         self._compiled = re.compile(self.pattern)
 
-    def match(self, line: str) -> Optional[str]:
-        """Returns the first matched string or None."""
+    def _matches(self, line: str):
+        """Yield the full text of each match that passes the rule's validator.
+
+        A rule may capture the value to validate in group 1 (for example the nine
+        digits of a contiguous SSN that is only recognised next to a keyword);
+        otherwise the whole match is validated.
+        """
         if self._compiled is None:
             self.compile()
-        m = self._compiled.search(line)
-        return m.group(0) if m else None
+        for m in self._compiled.finditer(line):
+            candidate = m.group(1) if m.re.groups and m.group(1) is not None else None
+            if validate(self.id, candidate if candidate is not None else m.group(0)):
+                yield m.group(0)
+
+    def match(self, line: str) -> Optional[str]:
+        """Returns the first validated matched string or None."""
+        return next(self._matches(line), None)
 
     def find_all(self, line: str) -> list[str]:
-        """Returns all matched substrings in the line."""
-        if self._compiled is None:
-            self.compile()
-        return [m.group(0) for m in self._compiled.finditer(line)]
+        """Returns all validated matched substrings in the line."""
+        return list(self._matches(line))
 
 
 @dataclass
@@ -55,6 +66,10 @@ class Allowlist:
 
     def suppresses(self, matched: str) -> bool:
         if matched in self.literals:
+            return True
+        # Formatted card numbers (4111-1111-1111-1111) match their contiguous form.
+        digits = re.sub(r"[-\s]", "", matched)
+        if digits != matched and digits.isdigit() and digits in self.literals:
             return True
         return any(p.search(matched) for p in self.patterns)
 

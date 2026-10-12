@@ -39,7 +39,27 @@ Ships as a **Python package + CLI** (`koality-pii-scan` / `pii-scan`), a **GitHu
   - **Context Anchoring**: Distinguishes generic numbers or hex strings by requiring assignment context.
   - **Minified Blob Defense**: Automatically skips minified bundles or generated blobs (>10,000 char lines) to avoid regex backtracking.
 - **Suppression Support**: Suppress false positives via inline comments (`# piiscan:ignore`) or a project-root `.piiscan-ignore` file.
+
 ---
+
+## Detector Coverage and Limits
+
+The scanner favors precision over recall: it can miss malformed or obfuscated values so that findings stay actionable. Accuracy is tracked by `tests/test_corpus.py` against a labeled, synthetic corpus (`testdata/corpus/labeled.jsonl`, minimum 0.95 precision and 0.95 recall per detector) plus unit tests for each validator.
+
+| Detector (`rule id`)            | What it matches                                                                                                                                                                | What it deliberately ignores                                                                                                                                                         |
+| :------------------------------ | :----------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | :----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Credit card (`credit-card`)     | 13-19 digit Visa, Mastercard (51-55, 2221-2720), Amex, Diners Club, JCB and Discover numbers, contiguous or separated by spaces/hyphens, with a **Luhn check** and issuer-prefix check | Luhn-invalid numbers, unissued prefixes, well-known network test PANs (e.g. `4111111111111111`, also when formatted)                                                                  |
+| US SSN (`ssn-us`)               | `123-45-6789` / `123 45 6789`, and nine contiguous digits **only next to `ssn` or `social security`** (within 20 non-digit characters)                                          | Area `000`, `666`, `900-999`, group `00`, serial `0000`; bare nine-digit numbers with no keyword                                                                                      |
+| Email (`email`)                 | Any `local@domain.tld` address, including corporate and internal domains                                                                                                       | RFC 2606/6761 reserved domains (`example.com/org/net`, `*.example`, `*.test`, `*.invalid`, `*.localhost`) and scp-style `git@host` remotes                                            |
+| Public webmail (`email-public-service`) | Addresses at consumer providers such as Gmail (medium-confidence companion to `email`)                                                                                  | Everything else (covered by `email`)                                                                                                                                                 |
+| IPv4 (`ipv4`)                   | Globally routable unicast dotted-quad addresses, with no keyword context required                                                                                             | Private, loopback, link-local, multicast, reserved, documentation and CGNAT ranges; `0.0.0.0`; `255.255.255.255`; `1.2.3.4`; common public DNS resolvers (`8.8.8.8`, `1.1.1.1`, ...) |
+| IPv6 (`ipv6`)                   | Globally routable unicast addresses, including `::` compressed forms, validated with Python's `ipaddress`                                                                      | Loopback, link-local, unique-local, multicast, documentation (`2001:db8::/32`), and things that only look like IPv6 (times, MAC addresses, `std::string`)                              |
+| MAC (`mac-address`)             | Six colon- or hyphen-separated byte pairs, with no keyword context required                                                                                                   | `00:00:00:00:00:00`, `ff:ff:ff:ff:ff:ff`, `01:23:45:67:89:ab`                                                                                                                         |
+
+Known limits: a four-part version number that happens to be a valid public IPv4 address (for example `45.33.12.7`) is reported as an IP; the generic `email` detector reports corporate addresses too, so allowlist or suppress internal domains you consider acceptable; hyphen/space-separated SSNs are reported without a keyword because the separator layout is itself a strong signal.
+
+---
+
 ## Quickstart
 ### Installation
 ```bash
@@ -165,6 +185,7 @@ You can also use the scanner programmatically in Python applications:
 from pathlib import Path
 from pii_scan.rules import default_ruleset
 from pii_scan.scanner import Config, run
+
 ruleset = default_ruleset()
 config = Config(
     source="./src",
