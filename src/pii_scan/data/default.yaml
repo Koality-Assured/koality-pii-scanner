@@ -31,11 +31,11 @@ allowlist:
     - "3530111333300000"   # JCB test
     - "3566002020360505"   # JCB test
   patterns:
+    # scp-style git remotes (git@github.com:org/repo) look like email addresses
+    - '(?i)^git@[A-Za-z0-9.-]+$'
+    # RFC 2606 / RFC 6761 reserved documentation and test domains
     - '(?i)@[A-Za-z0-9.-]*example\.(?:com|org|net)$'
-    - '(?i)@koalityassured\.com$'
-    - '(?i)@corp\.internal$'
-    - '(?i)@dev-company\.com$'
-    - '(?i)@agency\.net$'
+    - '(?i)@[A-Za-z0-9.-]+\.(?:test|invalid|example|localhost)$'
     # Any AWS-style key value ending in EXAMPLE (AWS documentation convention)
     - '^(?:AKIA|ABIA|ACCA|ASIA)[0-9A-Z]+EXAMPLE$'
     # Stripe documentation sample secret keys
@@ -54,7 +54,7 @@ rules:
 
   - id: credit-card
     description: Credit Card Number
-    pattern: '\b(?:(?:[3456]\d{3})[-\s]?\d{4}[-\s]?\d{4}[-\s]?\d{1,4}|(?:3[47]\d{2})[-\s]?\d{6}[-\s]?\d{5}|[3456]\d{12,18})\b'
+    pattern: '\b(?:(?:3[47]\d{2})[-\s]?\d{6}[-\s]?\d{5}|(?:3(?:0[0-5]|[689]\d)\d)[-\s]?\d{6}[-\s]?\d{4}|[2-6]\d{3}[-\s]?\d{4}[-\s]?\d{4}[-\s]?\d{1,4}|[2-6]\d{12,18})\b'
     confidence: high
     severity: critical
     category: financial
@@ -121,7 +121,7 @@ rules:
     cwe: ["CWE-359"]
     summary: Email address at a public consumer provider detected
     remediation: "Remove personal email addresses from source code and config. Internal corporate addresses are excluded from this rule. Use placeholder domains (e.g. example.com) in test data."
-    note: "Internal corporate addresses (e.g. koalityassured.com or company domains) are intentionally not flagged by this rule because it only targets public consumer webmail providers."
+    note: "This rule only targets public consumer webmail providers; the general email rule covers every other address."
   - id: email
     description: Email address
     pattern: '\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}\b'
@@ -444,7 +444,7 @@ rules:
     remediation: "MAC addresses are online identifiers and personal data under GDPR Recital 30. Avoid hardcoding device MAC addresses in source code."
   - id: ipv4
     description: IPv4 address
-    pattern: '\b(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\b'
+    pattern: '(?<![\w.])(?:(?:25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9]?[0-9])\.){3}(?:25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9]?[0-9])(?![\w]|\.\d)'
     confidence: medium
     severity: low
     category: pii
@@ -454,7 +454,7 @@ rules:
 
   - id: ipv6
     description: IPv6 address
-    pattern: '\b(?:[0-9a-fA-F]{1,4}:){2,7}[0-9a-fA-F]{1,4}\b'
+    pattern: '(?<![\w:.])(?=[0-9A-Fa-f:]*:[0-9A-Fa-f:]*:)[0-9A-Fa-f:]{3,39}(?![\w:.])'
     confidence: medium
     severity: low
     category: pii

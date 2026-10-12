@@ -1,11 +1,8 @@
-Internal corporate and documentation-placeholder email addresses. The
-email-public-service rule matches only public consumer providers, so none of
-these should be flagged.
+Documentation-placeholder email addresses on RFC 2606 / RFC 6761 reserved
+domains. The general email rule allowlists these, so none should be flagged.
 
-team@koalityassured.com
 admin@internal.example.org
-qa@corp.internal
-build@dev-company.com
-contractor@agency.net
+qa@build.test
 placeholder@example.com
+scp: git@github.com
 noreply@example.org

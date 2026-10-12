@@ -1,0 +1,101 @@
+{"text": "card = 4539185296307417", "rules": ["credit-card"]}
+{"text": "Card: 4539-1852-9630-7417", "rules": ["credit-card"]}
+{"text": "pay with 4929 1852 9630 7415", "rules": ["credit-card"]}
+{"text": "billing amex 3714-185296-30746", "rules": ["credit-card"]}
+{"text": "amex_number=371418529630746", "rules": ["credit-card"]}
+{"text": "mc: 5425185296307411", "rules": ["credit-card"]}
+{"text": "mc2 = 2223185296307412", "rules": ["credit-card"]}
+{"text": "discover 6011185296307419", "rules": ["credit-card"]}
+{"text": "discover 6500185296307417", "rules": ["credit-card"]}
+{"text": "diners 30561852963078", "rules": ["credit-card"]}
+{"text": "diners 3056-185296-3078", "rules": ["credit-card"]}
+{"text": "jcb 3528185296307412", "rules": ["credit-card"]}
+{"text": "old visa 4716185296305", "rules": ["credit-card"]}
+{"text": "card = 4539185296307418", "rules": []}
+{"text": "Card: 4539-1852-9630-7410", "rules": []}
+{"text": "ref 5425185296307412", "rules": []}
+{"text": "4111111111111111", "rules": []}
+{"text": "stripe test 4242 4242 4242 4242", "rules": []}
+{"text": "amex test 378282246310005", "rules": []}
+{"text": "order 1234567890123456", "rules": []}
+{"text": "ts=1697045123456", "rules": []}
+{"text": "uuid 123e4567-e89b-12d3-a456-426614174000", "rules": []}
+{"text": "ticket 2000185296307411", "rules": []}
+{"text": "id 9999999999999995", "rules": []}
+{"text": "ssn: 521-44-7890", "rules": ["ssn-us"]}
+{"text": "SSN 521 44 7890", "rules": ["ssn-us"]}
+{"text": "employee 472-30-1234 on file", "rules": ["ssn-us"]}
+{"text": "ssn=472301234", "rules": ["ssn-us"]}
+{"text": "SSN: 612908765", "rules": ["ssn-us"]}
+{"text": "Social Security number: 331224567", "rules": ["ssn-us"]}
+{"text": "social_security_no 331224567", "rules": ["ssn-us"]}
+{"text": "order = 472301234", "rules": []}
+{"text": "invoice 612908765", "rules": []}
+{"text": "ssn: 000-12-3456", "rules": []}
+{"text": "ssn 666-12-3456", "rules": []}
+{"text": "ssn 900-12-3456", "rules": []}
+{"text": "SSN 123-00-6789", "rules": []}
+{"text": "SSN 123-45-0000", "rules": []}
+{"text": "ssn: 666123456", "rules": []}
+{"text": "ssn: 12345678", "rules": []}
+{"text": "part 123-45-67890", "rules": []}
+{"text": "phone 415-555-0142", "rules": []}
+{"text": "ssn: 4723012345", "rules": []}
+{"text": "contact alice.smith@acme-widgets.io", "rules": ["email"]}
+{"text": "reply to bob+tag@mail.company.co.uk please", "rules": ["email"]}
+{"text": "tester@gmail.com", "rules": ["email"]}
+{"text": "owner = 'carol@dev-company.com'", "rules": ["email"]}
+{"text": "ops_team: dave_01@agency.net", "rules": ["email"]}
+{"text": "cc: erin@koality-widgets.org", "rules": ["email"]}
+{"text": "admin@example.com", "rules": []}
+{"text": "noreply@example.org", "rules": []}
+{"text": "qa@mail.example.net", "rules": []}
+{"text": "user@host.test", "rules": []}
+{"text": "a@b.invalid", "rules": []}
+{"text": "git clone git@github.com:acme/repo.git", "rules": []}
+{"text": "npm i lodash@4.17.21", "rules": []}
+{"text": "esbuild@0.19.0 installed", "rules": []}
+{"text": "email me at alice at acme dot io", "rules": []}
+{"text": "@pytest.fixture", "rules": []}
+{"text": "client 45.33.12.7", "rules": ["ipv4"]}
+{"text": "server=104.18.32.7:8080", "rules": ["ipv4"]}
+{"text": "from 185.199.108.153 port 22", "rules": ["ipv4"]}
+{"text": "X-Real-IP: 91.198.174.192", "rules": ["ipv4"]}
+{"text": "10.0.0.5", "rules": []}
+{"text": "host 192.168.1.10", "rules": []}
+{"text": "127.0.0.1", "rules": []}
+{"text": "172.16.4.9", "rules": []}
+{"text": "169.254.1.1", "rules": []}
+{"text": "doc 192.0.2.10", "rules": []}
+{"text": "doc 198.51.100.7", "rules": []}
+{"text": "doc 203.0.113.50", "rules": []}
+{"text": "mdns 224.0.0.251", "rules": []}
+{"text": "bind 0.0.0.0", "rules": []}
+{"text": "mask 255.255.255.255", "rules": []}
+{"text": "placeholder 1.2.3.4", "rules": []}
+{"text": "dns 8.8.8.8", "rules": []}
+{"text": "version 1.2.3.4.5", "rules": []}
+{"text": "build 300.1.1.1", "rules": []}
+{"text": "ratio 12.5.3", "rules": []}
+{"text": "addr 2a00:1450:4009:81f::200e", "rules": ["ipv6"]}
+{"text": "peer=2606:4700:4700::1111", "rules": ["ipv6"]}
+{"text": "host 2001:4860:4860:0:0:0:0:8888", "rules": ["ipv6"]}
+{"text": "::1", "rules": []}
+{"text": "link fe80::1", "rules": []}
+{"text": "ula fd00::1234", "rules": []}
+{"text": "doc 2001:db8::1", "rules": []}
+{"text": "multicast ff02::1", "rules": []}
+{"text": "at 12:30:45 UTC", "rules": []}
+{"text": "ratio 1:2:3", "rules": []}
+{"text": "std::string value", "rules": []}
+{"text": "unspecified ::", "rules": []}
+{"text": "mac 3c:22:fb:5a:91:0d", "rules": ["mac-address"]}
+{"text": "iface 3C-22-FB-5A-91-0D", "rules": ["mac-address"]}
+{"text": "device a4:83:e7:2f:10:9b", "rules": ["mac-address"]}
+{"text": "mac 00:00:00:00:00:00", "rules": []}
+{"text": "bcast ff:ff:ff:ff:ff:ff", "rules": []}
+{"text": "01:23:45:67:89:ab", "rules": []}
+{"text": "time 12:34:56", "rules": []}
+{"text": "The quick brown fox jumps over the lazy dog.", "rules": []}
+{"text": "invoice 2024-10-12 total 1234.56", "rules": []}
+{"text": "def add(a, b): return a + b", "rules": []}

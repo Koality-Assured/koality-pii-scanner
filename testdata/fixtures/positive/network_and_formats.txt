@@ -1,0 +1,8 @@
+SYNTHETIC test fixture — NOT real personal data. Validates the general email, formatted card, contiguous SSN and network-address detectors.
+
+Corporate email (general email rule): alice.smith@acme-widgets.io
+Formatted credit card (Luhn-valid, not a network test PAN): 4539-1852-9630-7417
+Contiguous SSN with keyword context: ssn=472301234
+Public IPv4 address: client 45.33.12.7
+Public IPv6 address: peer 2a00:1450:4009:81f::200e
+Device MAC address: 3c:22:fb:5a:91:0d

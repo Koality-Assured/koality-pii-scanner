@@ -19,6 +19,13 @@ positive:
     - pii-scan:credit-card
     - pii-scan:us-phone
     - pii-scan:email-public-service
+  network_and_formats.txt:
+    - pii-scan:email
+    - pii-scan:credit-card
+    - pii-scan:ssn-us
+    - pii-scan:ipv4
+    - pii-scan:ipv6
+    - pii-scan:mac-address
   gaming_ids.yaml:
     - pii-scan:steam-id-64
     - pii-scan:nintendo-switch-friend-code

@@ -1,6 +1,23 @@
 import ipaddress
 
 
+def _has_known_iin(cc: str) -> bool:
+    p2, p3, p4, p6 = int(cc[:2]), int(cc[:3]), int(cc[:4]), int(cc[:6])
+    if cc[0] == "4":  # Visa
+        return True
+    if 51 <= p2 <= 55 or 2221 <= p4 <= 2720:  # Mastercard
+        return True
+    if p2 in (34, 37):  # American Express
+        return True
+    if 300 <= p3 <= 305 or p2 in (36, 38, 39):  # Diners Club
+        return True
+    if 3528 <= p4 <= 3589:  # JCB
+        return True
+    if p4 == 6011 or p2 == 65 or 644 <= p3 <= 649:  # Discover
+        return True
+    return 622126 <= p6 <= 622925  # Discover / UnionPay co-brand
+
+
 def is_valid_credit_card(cc: str) -> bool:
     # Remove separators
     cc = cc.replace("-", "").replace(" ", "")
@@ -9,21 +26,8 @@ def is_valid_credit_card(cc: str) -> bool:
     if len(cc) < 13 or len(cc) > 19:
         return False
 
-    # IIN check
-
-    valid_iin = False
-    if cc.startswith("4"):
-        valid_iin = True
-    elif 51 <= int(cc[:2]) <= 55:
-        valid_iin = True
-    elif cc[:2] in ("34", "37"):
-        valid_iin = True
-    elif 300 <= int(cc[:3]) <= 305 or cc[:2] in ("36", "38"):
-        valid_iin = True
-    elif cc.startswith("6011") or 650000 <= int(cc[:6].ljust(6, "0")) <= 659999:  # 65xx
-        valid_iin = True
-
-    if not valid_iin:
+    # IIN / network prefix check (reject Luhn-valid numbers on unissued ranges)
+    if not _has_known_iin(cc):
         return False
 
     # Luhn check
@@ -58,55 +62,35 @@ def is_valid_ssn(ssn: str) -> bool:
     return True
 
 
+# Placeholder and ubiquitous public-resolver addresses that are not personal data.
+_IGNORED_IPV4 = frozenset(
+    {"1.2.3.4", "1.1.1.1", "1.0.0.1", "8.8.8.8", "8.8.4.4", "9.9.9.9"}
+)
+
+
 def is_valid_ipv4(ip: str) -> bool:
+    """True for a globally routable unicast IPv4 address.
+
+    Private, loopback, link-local, multicast, reserved, documentation
+    (192.0.2.0/24, 198.51.100.0/24, 203.0.113.0/24) and shared (CGNAT) ranges are
+    excluded, as are a few well-known placeholders.
+    """
     try:
         addr = ipaddress.IPv4Address(ip)
-        # exclude private, loopback, link-local, multicast, documentation
-        if (
-            addr.is_private
-            or addr.is_loopback
-            or addr.is_link_local
-            or addr.is_multicast
-        ):
-            return False
-        # documentation: 192.0.2.0/24, 198.51.100.0/24, 203.0.113.0/24
-        # IP prefix checks are easier with ip_network, but we can just check string prefixes
-        if (
-            ip.startswith("192.0.2.")
-            or ip.startswith("198.51.100.")
-            or ip.startswith("203.0.113.")
-        ):
-            return False
-        # Ignore common version number lookalikes like 1.2.3.4 (actually 1.x is valid but often versions)
-        if ip in (
-            "1.2.3.4",
-            "1.0.0.0",
-            "0.0.0.0",
-            "255.255.255.255",
-            "8.8.8.8",
-            "1.1.1.1",
-        ):
-            # Actually 8.8.8.8 and 1.1.1.1 are public DNS. Let's not hardcode exclude them, unless it's a version.
-            if ip in ("1.2.3.4", "0.0.0.0", "255.255.255.255"):
-                return False
-        return True
     except ValueError:
         return False
+    if ip in _IGNORED_IPV4:
+        return False
+    return addr.is_global and not addr.is_multicast
 
 
 def is_valid_ipv6(ip: str) -> bool:
+    """True for a globally routable unicast IPv6 address (must parse as IPv6)."""
     try:
         addr = ipaddress.IPv6Address(ip)
-        if (
-            addr.is_private
-            or addr.is_loopback
-            or addr.is_link_local
-            or addr.is_multicast
-        ):
-            return False
-        return True
     except ValueError:
         return False
+    return addr.is_global and not addr.is_multicast
 
 
 def is_valid_mac(mac: str) -> bool:
