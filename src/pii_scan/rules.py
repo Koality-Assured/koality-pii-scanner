@@ -27,14 +27,30 @@ class Rule:
         """Returns the first matched string or None."""
         if self._compiled is None:
             self.compile()
-        m = self._compiled.search(line)
-        return m.group(0) if m else None
+        from .validators import validate
+
+        for m in self._compiled.finditer(line):
+            matched = (
+                m.group(1) if m.groups() and m.group(1) is not None else m.group(0)
+            )
+            if validate(self.id, matched):
+                return matched
+        return None
 
     def find_all(self, line: str) -> list[str]:
         """Returns all matched substrings in the line."""
         if self._compiled is None:
             self.compile()
-        return [m.group(0) for m in self._compiled.finditer(line)]
+        from .validators import validate
+
+        results = []
+        for m in self._compiled.finditer(line):
+            matched = (
+                m.group(1) if m.groups() and m.group(1) is not None else m.group(0)
+            )
+            if validate(self.id, matched):
+                results.append(matched)
+        return results
 
 
 @dataclass

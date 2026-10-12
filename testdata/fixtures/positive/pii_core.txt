@@ -1,6 +1,6 @@
 SYNTHETIC test fixture — NOT real personal data. Validates core PII detection.
 
 US Social Security Number: 123-45-6789
-Credit card number (not a standard test PAN): 4111111111111112
+Credit card number (not a standard test PAN): 4111111111111129
 US phone number (reserved fictional 555-01xx range): 415-555-0142
 Personal email at a public consumer provider: tester@gmail.com

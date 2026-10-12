@@ -488,7 +488,7 @@ class TestAllowlist:
 
     def test_real_credit_card_still_detected(self, tmp_path):
         # Not in the test-PAN allowlist -> still reported
-        result = self._run_on(tmp_path, "card = 4111111111111112\n", "config.py")
+        result = self._run_on(tmp_path, "card = 4111111111111129\n", "config.py")
         assert "pii-scan:credit-card" in self._ids(result)
 
 

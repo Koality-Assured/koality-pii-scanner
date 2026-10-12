@@ -39,7 +39,19 @@ Ships as a **Python package + CLI** (`koality-pii-scan` / `pii-scan`), a **GitHu
   - **Context Anchoring**: Distinguishes generic numbers or hex strings by requiring assignment context.
   - **Minified Blob Defense**: Automatically skips minified bundles or generated blobs (>10,000 char lines) to avoid regex backtracking.
 - **Suppression Support**: Suppress false positives via inline comments (`# piiscan:ignore`) or a project-root `.piiscan-ignore` file.
+
 ---
+
+## Detector Coverage and Limits
+
+The scanner is optimized for precision over recall. This means it may miss malformed or highly obfuscated data in order to keep false positives low.
+- **Credit Cards**: Matches contiguous and separated forms (13-19 digits). Enforces Luhn checksum validation and IIN prefix validation.
+- **US SSNs**: Matches both separated (e.g. `123-45-6789`) and contiguous forms. Contiguous forms require contextual keywords (e.g., "ssn") to avoid generic number matching. Enforces SSA validity rules (area not 000/666/900-999).
+- **Email Addresses**: A generic detector flags personal email addresses. Internal/corporate emails must be explicitly ignored or added to the allowlist (e.g., `example.com`, `corp.internal`). An additional targeted detector specifically flags public consumer webmail providers with high confidence.
+- **Network / Device Addresses**: Detects context-free IPv4, IPv6, and MAC addresses with sensible exclusions for private, loopback, multicast, link-local, and documentation IP ranges. Version numbers mimicking IPv4 are excluded.
+
+---
+
 ## Quickstart
 ### Installation
 ```bash
@@ -165,6 +177,7 @@ You can also use the scanner programmatically in Python applications:
 from pathlib import Path
 from pii_scan.rules import default_ruleset
 from pii_scan.scanner import Config, run
+
 ruleset = default_ruleset()
 config = Config(
     source="./src",

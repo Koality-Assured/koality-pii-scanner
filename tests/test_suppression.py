@@ -28,7 +28,7 @@ RULESET = load(_RULES_YAML)
 def test_inline_ignore_general(tmp_path):
     f = tmp_path / "sample.py"
     f.write_text(
-        'ssn = "123-45-6789"  # piiscan:ignore\nreal_ssn = "987-65-4321"\n',
+        'ssn = "123-45-6789"  # piiscan:ignore\nreal_ssn = "123-65-4321"\n',
         encoding="utf-8",
     )
     result = run(Config(source=str(tmp_path), ruleset=RULESET))
