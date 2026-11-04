@@ -12,8 +12,8 @@
 
 [![CI](https://github.com/Koality-Assured/koality-pii-scanner/actions/workflows/ci.yml/badge.svg)](https://github.com/Koality-Assured/koality-pii-scanner/actions/workflows/ci.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
-[![Python >=3.11](https://img.shields.io/badge/python->=3.11-blue.svg)](pyproject.toml)
-[![Domain: Scanner](https://img.shields.io/badge/domain-scanner-blueviolet.svg)]()
+[![Python 3.11+](https://img.shields.io/badge/python-3.11+-blue.svg)](pyproject.toml)
+[![Domain: Scanner](https://img.shields.io/badge/domain-scanner-blueviolet.svg)](#)
 [![Conventional Commits](https://img.shields.io/badge/Conventional%20Commits-1.0.0-yellow.svg)](https://conventionalcommits.org)
 
 </div>
